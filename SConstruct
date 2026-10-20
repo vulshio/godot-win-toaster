@@ -46,14 +46,16 @@ env = SConscript("godot-cpp/SConstruct", {"api_version": api_version, "env": env
 env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
 
-# WinToast (optional): vendor the library into this repository (e.g.
-# thirdparty/WinToast/include + src) and uncomment the block below.
-# wintoast_dir = "thirdparty/WinToast"
-# env.Append(CPPPATH=[wintoast_dir + "/include"])
-# sources += Glob(wintoast_dir + "/src/*.cpp")
-# if env["platform"] == "windows":
-#     env.Append(CPPDEFINES=["UNICODE", "_UNICODE"])
-#     env.Append(LIBS=["psapi"])  # shlwapi/user32 come from #pragma comment in wintoastlib.cpp
+# WinToast, vendored under thirdparty/WinToast.
+wintoast_dir = "thirdparty/WinToast"
+env.Append(CPPPATH=[wintoast_dir + "/include"])
+sources += Glob(wintoast_dir + "/src/*.cpp")
+
+if env["platform"] == "windows":
+	env.Append(CPPDEFINES=["UNICODE", "_UNICODE"])
+	# shlwapi/user32 are also referenced by #pragma comment in wintoastlib.cpp;
+	# listing them here keeps MinGW builds working as well.
+	env.Append(LIBS=["psapi", "shlwapi", "user32"])
 
 if env["target"] in ["editor", "template_debug"]:
     try:

@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.17)
 if(CMAKE_C_COMPILER)
 endif()
 
-set(LIBNAME "EXTENSION-NAME") # "The name of the library"
+set(LIBNAME "godot_win_toaster") # "The name of the library"
 set(GODOT_PROJECT_DIR "project" CACHE STRING "The directory of a Godot project folder")
 
 # Make sure all the dependencies are satisfied
@@ -55,9 +55,19 @@ target_sources(${LIBNAME}
     PRIVATE
     src/register_types.cpp
     src/register_types.h
-    src/example_class.cpp
-    src/example_class.h
+    src/toast_options.cpp
+    src/toast_options.h
+    src/win_toaster.cpp
+    src/win_toaster.h
+    thirdparty/WinToast/src/wintoastlib.cpp
 )
+
+target_include_directories(${LIBNAME} PRIVATE thirdparty/WinToast/include)
+
+if(WIN32)
+    target_compile_definitions(${LIBNAME} PRIVATE UNICODE _UNICODE)
+    target_link_libraries(${LIBNAME} PRIVATE psapi shlwapi user32)
+endif()
 
 # Fetch a list of the xml files to use for documentation and add to our target
 file(GLOB_RECURSE DOC_XML LIST_DIRECTORIES NO CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/doc_classes/*.xml")
