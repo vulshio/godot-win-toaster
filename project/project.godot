@@ -17,3 +17,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 config/name="godot cpp template"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="uid://dbx66sovxd1"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/doc_translation_win_toaster/plugin.cfg")

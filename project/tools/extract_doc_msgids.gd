@@ -1,15 +1,21 @@
 extends SceneTree
 
-# Regenerates the class-reference translation table from doc_classes/Table.xml.
+# Regenerates the class-reference translation table from the GDExtension docs.
 #
-#   cd godot-cpp-template
+#   cd godot-win-toaster
 #   "../Godot v4.7.2/Godot_v4.7.2-stable_win64_console.exe" --headless \
 #       --path project --script res://tools/extract_doc_msgids.gd
 #
+# GDExtension documentation is always English: the engine has no mechanism to
+# load a second doc XML. The class reference does, however, translate every text
+# node through the "godot.documentation" translation domain, so the docs are
+# translated by injecting a PO table into that domain (see
+# addons/doc_translation_win_toaster/).
+#
 # The table is PO, the same format the engine's own class reference uses. The
 # engine loads it directly (core/io/translation_loader_po.cpp) - there is no
-# import step - and the plugin injects it into the "godot.documentation" domain.
-# File layout, escaping and the mandatory header live in tools/doc_po.gd.
+# import step. File layout, escaping and the mandatory header live in
+# tools/doc_po.gd.
 #
 # Existing translations are kept, new msgids are added empty, and msgids that no
 # longer appear in the XML are moved to the `#~` obsolete section at the end of
@@ -25,19 +31,30 @@ extends SceneTree
 
 const DocPO := preload("res://tools/doc_po.gd")
 
-const XML_PATH := "res://../doc_classes/Table.xml"
-const TABLE_BASE := "res://addons/table_gdextension/translations/table_docs."
+# Both doc_classes files are merged into one table; order is preserved so the PO
+# file stays stable between runs.
+const XML_PATHS := [
+	"res://../doc_classes/WinToaster.xml",
+	"res://../doc_classes/ToastOptions.xml",
+]
+const TABLE_BASE := "res://addons/doc_translation_win_toaster/translations/win_toaster_docs."
 const LOCALE := "zh_CN"
 
 
 func _initialize() -> void:
-	var msgids := DocPO.collect_msgids(XML_PATH)
+	var msgids: Array[String] = []
+	for xml_path in XML_PATHS:
+		for id in DocPO.collect_msgids(xml_path):
+			if not msgids.has(id):
+				msgids.append(id)
+
 	if msgids.is_empty():
-		push_error("no text nodes found in %s" % XML_PATH)
+		push_error("no text nodes found in %s" % ", ".join(XML_PATHS))
 		quit(1)
 		return
 
 	var table_path := TABLE_BASE + LOCALE + ".po"
+	DirAccess.make_dir_recursive_absolute(table_path.get_base_dir())
 	var existing := DocPO.read_po(table_path)
 
 	# Live and obsolete are both sources of a translation, so an entry that comes

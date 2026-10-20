@@ -1,10 +1,14 @@
 extends Button
 
+@export var with_image: bool = true
+@export var with_action: bool = true
+@export var other_sound: bool = false
+
 var toaster: WinToaster = null
 
 func _ready() -> void:
 	toaster = WinToaster.new()
-	toaster.initialize("文件资源管理器", "Godot.Toaster", true)
+	toaster.initialize("Toaster", "Godot.Win.Toaster", true)
 
 	toaster.toast_shown.connect(_on_toast_shown)
 	toaster.toast_activated.connect(_on_toast_activated)
@@ -13,10 +17,17 @@ func _ready() -> void:
 
 func _pressed() -> void:
 	var options := ToastOptions.new()
-	options.icon_path = ProjectSettings.globalize_path("res://ice.png")
 	options.image_crop = WinToaster.TOAST_IMAGE_CROP_CIRCLE
 	options.replace_previous = true
-	options.actions = ["Okay", "Nope"]
+
+	if with_image:
+		options.icon_path = ProjectSettings.globalize_path("res://ice.png")
+
+	if with_action:
+		options.actions = ["Okay", "Nope"]
+	
+	if other_sound:
+		options.sound = WinToaster.TOAST_SOUND_IM
 
 	toaster.show_toast("hello", "冰冰冰!", options)
 

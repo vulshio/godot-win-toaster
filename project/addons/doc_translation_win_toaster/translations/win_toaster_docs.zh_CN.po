@@ -1,0 +1,180 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WinToaster GDExtension\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.9\n"
+
+msgid "Shows Windows toast notifications."
+msgstr "显示 Windows toast 通知。"
+
+msgid "Thin wrapper around the vendored WinToast library. Call [method initialize] once, then use [method show_toast] to display notifications."
+msgstr "对内置 WinToast 库的轻量封装。先调用一次 [method initialize]，然后使用 [method show_toast] 显示通知。"
+
+msgid "Hides all currently displayed toasts."
+msgstr "隐藏当前显示的所有 toast。"
+
+msgid "Hides the toast with the given id. Returns [code]true[/code] on success."
+msgstr "隐藏指定 id 的 toast。成功时返回 [code]true[/code]。"
+
+msgid "Initializes WinToast. [param app_name] is the name shown in the notification, and [param app_id] is the AppUserModelID (for example [code]MyCompany.MyGame[/code]). When [param create_shortcut] is [code]true[/code], WinToast creates or updates a Start Menu shortcut that registers the AppUserModelID. Unpackaged desktop applications need that registration for toast banners to appear: with [param create_shortcut] set to [code]false[/code] and no existing shortcut for [param app_id], Windows may accept the toast (it shows up in the notification center) but never display a banner. Only pass [code]false[/code] when the AppUserModelID is already registered by a shortcut you created yourself. Returns [code]true[/code] on success. Calling this more than once is a no-op."
+msgstr ""
+"初始化 WinToast。[param app_name] 是通知中显示的应用名称，[param app_id] 是 AppUserModelID（例如 [code]MyCompany.MyGame[/code]）。\n"
+"当 [param create_shortcut] 为 [code]true[/code] 时，WinToast 会创建或更新一个注册该 AppUserModelID 的开始菜单快捷方式。未打包的桌面应用需要这项注册才能弹出 toast 横幅：若 [param create_shortcut] 为 [code]false[/code] 且 [param app_id] 没有对应的现有快捷方式，Windows 可能接收该 toast（它会出现在通知中心）但永远不会显示横幅。只有在你已自行创建快捷方式注册该 AppUserModelID 时才应传入 [code]false[/code]。\n"
+"成功时返回 [code]true[/code]。重复调用不会产生任何效果。"
+
+msgid "Returns [code]true[/code] if the current Windows version supports toast notifications."
+msgstr "如果当前 Windows 版本支持 toast 通知，则返回 [code]true[/code]。"
+
+msgid "Returns [code]true[/code] if [method initialize] succeeded."
+msgstr "如果 [method initialize] 已成功，则返回 [code]true[/code]。"
+
+msgid "Shows a two-line toast and returns its id, or [code]-1[/code] on failure. Icon, duration, sound, image crop and replace behaviour are configured through a [ToastOptions] object; pass [code]null[/code] to use the defaults."
+msgstr "显示一个两行 toast 并返回其 id，失败时返回 [code]-1[/code]。图标、时长、声音、图片裁剪和替换行为通过 [ToastOptions] 对象配置；传入 [code]null[/code] 使用默认值。"
+
+msgid "Emitted when the user activates (clicks) a toast. This is always emitted on the main thread."
+msgstr "用户激活（点击）toast 时发出。该信号始终在主线程发出。"
+
+msgid "Emitted when the user clicks one of the action buttons configured through [member ToastOptions.actions]. [param action_index] is the zero-based index into that array."
+msgstr "用户点击通过 [member ToastOptions.actions] 配置的某个操作按钮时发出。[param action_index] 是该数组中的从 0 开始的索引。"
+
+msgid "Emitted when Windows reports that the toast could not be displayed, for example because its content or audio URI was invalid."
+msgstr "Windows 报告 toast 无法显示时发出，例如通知内容或音频 URI 无效。"
+
+msgid "Emitted after a toast was successfully handed to Windows, with the id returned by [method show_toast]."
+msgstr "成功将 toast 交给 Windows 后发出，参数为 [method show_toast] 返回的 id。"
+
+msgid "Use the system default toast duration."
+msgstr "使用系统默认的 toast 显示时长。"
+
+msgid "Short duration (about 7 seconds)."
+msgstr "短时长（约 7 秒）。"
+
+msgid "Long duration (about 25 seconds)."
+msgstr "长时长（约 25 秒）。"
+
+msgid "Play the selected toast sound once."
+msgstr "将选中的 toast 声音播放一次。"
+
+msgid "Show the toast without any sound."
+msgstr "静音显示 toast。"
+
+msgid "Loop the toast sound until the toast is dismissed."
+msgstr "循环播放 toast 声音，直到 toast 被关闭。"
+
+msgid "Crop the toast image to a square."
+msgstr "将 toast 图片裁剪为正方形。"
+
+msgid "Crop the toast image to a circle."
+msgstr "将 toast 图片裁剪为圆形。"
+
+msgid "Default notification sound."
+msgstr "默认通知声音。"
+
+msgid "Instant message sound."
+msgstr "即时消息提示音。"
+
+msgid "Mail sound."
+msgstr "邮件提示音。"
+
+msgid "Reminder sound."
+msgstr "提醒提示音。"
+
+msgid "SMS sound."
+msgstr "短信提示音。"
+
+msgid "Looping alarm sound."
+msgstr "循环闹钟提示音。"
+
+msgid "Looping alarm sound 2."
+msgstr "循环闹钟提示音 2。"
+
+msgid "Looping alarm sound 3."
+msgstr "循环闹钟提示音 3。"
+
+msgid "Looping alarm sound 4."
+msgstr "循环闹钟提示音 4。"
+
+msgid "Looping alarm sound 5."
+msgstr "循环闹钟提示音 5。"
+
+msgid "Looping alarm sound 6."
+msgstr "循环闹钟提示音 6。"
+
+msgid "Looping alarm sound 7."
+msgstr "循环闹钟提示音 7。"
+
+msgid "Looping alarm sound 8."
+msgstr "循环闹钟提示音 8。"
+
+msgid "Looping alarm sound 9."
+msgstr "循环闹钟提示音 9。"
+
+msgid "Looping alarm sound 10."
+msgstr "循环闹钟提示音 10。"
+
+msgid "Looping call sound."
+msgstr "循环来电提示音。"
+
+msgid "Looping call sound 1."
+msgstr "循环来电提示音 1。"
+
+msgid "Looping call sound 2."
+msgstr "循环来电提示音 2。"
+
+msgid "Looping call sound 3."
+msgstr "循环来电提示音 3。"
+
+msgid "Looping call sound 4."
+msgstr "循环来电提示音 4。"
+
+msgid "Looping call sound 5."
+msgstr "循环来电提示音 5。"
+
+msgid "Looping call sound 6."
+msgstr "循环来电提示音 6。"
+
+msgid "Looping call sound 7."
+msgstr "循环来电提示音 7。"
+
+msgid "Looping call sound 8."
+msgstr "循环来电提示音 8。"
+
+msgid "Looping call sound 9."
+msgstr "循环来电提示音 9。"
+
+msgid "Looping call sound 10."
+msgstr "循环来电提示音 10。"
+
+msgid "Presentation options for [method WinToaster.show_toast]."
+msgstr "[method WinToaster.show_toast] 的展示选项。"
+
+msgid "Every property has a default value, so only the ones that should differ from the defaults need to be set. Create one instance and reuse it for multiple toasts if the settings stay the same."
+msgstr "每个属性都有默认值，因此只需设置需要与默认值不同的属性。如果设置保持不变，可以创建一个实例并复用于多个 toast。"
+
+msgid "Labels of action buttons shown on the toast. Windows supports at most 5; extra entries are ignored. Clicking a button emits [signal WinToaster.toast_action] with its zero-based index."
+msgstr "toast 上显示的操作按钮文本。Windows 最多支持 5 个，多余的条目会被忽略。点击按钮会发出 [signal WinToaster.toast_action]，并附带其从 0 开始的索引。"
+
+msgid "How the toast sound is played: once, silently, or in a loop."
+msgstr "toast 声音的播放方式：播放一次、静音或循环播放。"
+
+msgid "How long the toast stays on screen."
+msgstr "toast 在屏幕上停留的时长。"
+
+msgid "Absolute path to a PNG, JPG or GIF displayed in the toast. Empty means no icon. SVG is not supported by Windows toast images."
+msgstr "toast 中显示的 PNG、JPG 或 GIF 文件的绝对路径。为空表示不显示图标。Windows toast 图片不支持 SVG。"
+
+msgid "How the icon is cropped (square or circle)."
+msgstr "图标的裁剪方式（正方形或圆形）。"
+
+msgid "If [code]true[/code], toasts currently displayed or queued by this app are hidden first so the new toast appears immediately."
+msgstr "如果为 [code]true[/code]，会先隐藏此应用当前显示或排队的 toast，使新 toast 立即出现。"
+
+msgid "System sound to play. Custom audio files are not reliably available to unpackaged desktop apps, so system sounds are preferred."
+msgstr "要播放的系统声音。自定义音频文件对未打包的桌面应用并不可靠，因此建议使用系统声音。"
