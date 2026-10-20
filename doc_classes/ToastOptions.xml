@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="ToastOptions" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Presentation options for [method WinToaster.show_toast].
+	</brief_description>
+	<description>
+		Every property has a default value, so only the ones that should differ from the defaults need to be set. Create one instance and reuse it for multiple toasts if the settings stay the same.
+	</description>
+	<tutorials>
+	</tutorials>
+	<members>
+		<member name="actions" type="PackedStringArray" setter="set_actions" getter="get_actions" default="PackedStringArray()">
+			Labels of action buttons shown on the toast. Windows supports at most 5; extra entries are ignored. Clicking a button emits [signal WinToaster.toast_action] with its zero-based index.
+		</member>
+		<member name="audio_option" type="int" setter="set_audio_option" getter="get_audio_option" enum="WinToaster.ToastAudioOption" default="0">
+			How the toast sound is played: once, silently, or in a loop.
+		</member>
+		<member name="duration" type="int" setter="set_duration" getter="get_duration" enum="WinToaster.ToastDuration" default="0">
+			How long the toast stays on screen.
+		</member>
+		<member name="icon_path" type="String" setter="set_icon_path" getter="get_icon_path" default="&quot;&quot;">
+			Absolute path to a PNG, JPG or GIF displayed in the toast. Empty means no icon. SVG is not supported by Windows toast images.
+		</member>
+		<member name="image_crop" type="int" setter="set_image_crop" getter="get_image_crop" enum="WinToaster.ToastImageCrop" default="0">
+			How the icon is cropped (square or circle).
+		</member>
+		<member name="replace_previous" type="bool" setter="set_replace_previous" getter="is_replace_previous" default="false">
+			If [code]true[/code], toasts currently displayed or queued by this app are hidden first so the new toast appears immediately.
+		</member>
+		<member name="sound" type="int" setter="set_sound" getter="get_sound" enum="WinToaster.ToastSound" default="0">
+			System sound to play. Custom audio files are not reliably available to unpackaged desktop apps, so system sounds are preferred.
+		</member>
+	</members>
+</class>
