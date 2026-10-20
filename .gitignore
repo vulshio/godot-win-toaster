@@ -5,6 +5,8 @@
 # Ignore library files but not the gdextension file
 /bin/**
 !project/bin/*.gdextension
+# Compiled extension binaries that SCons installs into the Godot project
+project/bin/*/
 
 # Ignore scons database
 .sconsign*.dblite

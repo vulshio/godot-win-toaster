@@ -5,8 +5,14 @@ import sys
 from methods import print_error
 
 
-libname = "EXTENSION-NAME"
+libname = "godot_win_toaster"
 projectdir = "project"
+
+# Godot version the bindings are generated against. godot-cpp supports 4.3 to 4.7.
+# Keep this at the lowest engine version you want to support: a library built
+# against 4.3 still loads in 4.4+, as long as compatibility_minimum in
+# project/bin/godot_win_toaster.gdextension matches.
+api_version = "4.3"
 
 localEnv = Environment(tools=["default"], PLATFORM="")
 
@@ -35,10 +41,19 @@ Run the following command to download godot-cpp:
     git submodule update --init --recursive""")
     sys.exit(1)
 
-env = SConscript("godot-cpp/SConstruct", {"api_version": 4.3, "env": env, "customs": customs})
+env = SConscript("godot-cpp/SConstruct", {"api_version": api_version, "env": env, "customs": customs})
 
 env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
+
+# WinToast (optional): vendor the library into this repository (e.g.
+# thirdparty/WinToast/include + src) and uncomment the block below.
+# wintoast_dir = "thirdparty/WinToast"
+# env.Append(CPPPATH=[wintoast_dir + "/include"])
+# sources += Glob(wintoast_dir + "/src/*.cpp")
+# if env["platform"] == "windows":
+#     env.Append(CPPDEFINES=["UNICODE", "_UNICODE"])
+#     env.Append(LIBS=["psapi"])  # shlwapi/user32 come from #pragma comment in wintoastlib.cpp
 
 if env["target"] in ["editor", "template_debug"]:
     try:
