@@ -9,6 +9,9 @@
 	<tutorials>
 	</tutorials>
 	<members>
+		<member name="actions" type="PackedStringArray" setter="set_actions" getter="get_actions" default="PackedStringArray()">
+			Labels of action buttons shown on the toast. Windows supports at most 5; extra entries are ignored. Clicking a button emits [signal WinToaster.toast_action] with its zero-based index.
+		</member>
 		<member name="audio_option" type="int" setter="set_audio_option" getter="get_audio_option" enum="WinToaster.ToastAudioOption" default="0">
 			How the toast sound is played: once, silently, or in a loop.
 		</member>

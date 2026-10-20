@@ -28,7 +28,7 @@
 			<param index="1" name="app_id" type="String" />
 			<param index="2" name="create_shortcut" type="bool" default="true" />
 			<description>
-				Initializes WinToast. [param app_name] is the name shown in the notification, and [param app_id] is the AppUserModelID (for example [code]MyCompany.MyGame[/code]). When [param create_shortcut] is [code]true[/code], WinToast creates or updates a Start Menu shortcut for the AppUserModelID, which some Windows versions require for toasts to appear. Returns [code]true[/code] on success. Calling this more than once is a no-op.
+				Initializes WinToast. [param app_name] is the name shown in the notification, and [param app_id] is the AppUserModelID (for example [code]MyCompany.MyGame[/code]). When [param create_shortcut] is [code]true[/code], WinToast creates or updates a Start Menu shortcut that registers the AppUserModelID. Unpackaged desktop applications need that registration for toast banners to appear: with [param create_shortcut] set to [code]false[/code] and no existing shortcut for [param app_id], Windows may accept the toast (it shows up in the notification center) but never display a banner. Only pass [code]false[/code] when the AppUserModelID is already registered by a shortcut you created yourself. Returns [code]true[/code] on success. Calling this more than once is a no-op.
 			</description>
 		</method>
 		<method name="is_available" qualifiers="static">
@@ -58,6 +58,13 @@
 			<param index="0" name="toast_id" type="int" />
 			<description>
 				Emitted when the user activates (clicks) a toast. This is always emitted on the main thread.
+			</description>
+		</signal>
+		<signal name="toast_action">
+			<param index="0" name="toast_id" type="int" />
+			<param index="1" name="action_index" type="int" />
+			<description>
+				Emitted when the user clicks one of the action buttons configured through [member ToastOptions.actions]. [param action_index] is the zero-based index into that array.
 			</description>
 		</signal>
 		<signal name="toast_failed">

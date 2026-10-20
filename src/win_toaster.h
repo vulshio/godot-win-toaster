@@ -78,8 +78,10 @@ public:
 	// Must be called once before show_toast(). Calling it again is a no-op.
 	// p_app_name is shown in the notification's app name field, and p_app_id is
 	// the AppUserModelID (e.g. "MyCompany.MyGame").
-	// p_create_shortcut lets WinToast create/update a Start Menu shortcut for the
-	// AppUserModelID, which some Windows versions require for toasts to appear.
+	// p_create_shortcut lets WinToast create/update a Start Menu shortcut that
+	// registers the AppUserModelID. Unpackaged apps need that registration for
+	// toast banners to appear; without it Windows may accept the toast (it ends
+	// up in the notification center) but never show a banner.
 	bool initialize(const String &p_app_name, const String &p_app_id, bool p_create_shortcut = true);
 	bool is_initialized() const;
 

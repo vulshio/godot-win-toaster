@@ -2,6 +2,7 @@
 
 #include <godot_cpp/classes/ref_counted.hpp>
 #include <godot_cpp/classes/wrapped.hpp>
+#include <godot_cpp/variant/packed_string_array.hpp>
 #include <godot_cpp/variant/string.hpp>
 
 #include "win_toaster.h"
@@ -14,6 +15,7 @@ class ToastOptions : public RefCounted {
 	GDCLASS(ToastOptions, RefCounted)
 
 	String icon_path;
+	PackedStringArray actions;
 	WinToaster::ToastImageCrop image_crop = WinToaster::TOAST_IMAGE_CROP_SQUARE;
 	WinToaster::ToastDuration duration = WinToaster::TOAST_DURATION_SYSTEM;
 	WinToaster::ToastSound sound = WinToaster::TOAST_SOUND_DEFAULT;
@@ -27,6 +29,11 @@ public:
 	// Absolute path to a PNG/JPG/GIF shown in the toast. Empty means no icon.
 	void set_icon_path(const String &p_icon_path) { icon_path = p_icon_path; }
 	String get_icon_path() const { return icon_path; }
+
+	// Buttons shown on the toast. Windows supports up to 5; extra entries are
+	// ignored. Clicking one emits WinToaster.toast_action with its index.
+	void set_actions(const PackedStringArray &p_actions) { actions = p_actions; }
+	PackedStringArray get_actions() const { return actions; }
 
 	void set_image_crop(WinToaster::ToastImageCrop p_image_crop) { image_crop = p_image_crop; }
 	WinToaster::ToastImageCrop get_image_crop() const { return image_crop; }

@@ -40,7 +40,7 @@ public:
 			_toaster_id(p_toaster_id), _toast_id(std::move(p_toast_id)) {}
 
 	void toastActivated() const override { notify_signal("toast_activated"); }
-	void toastActivated(int) const override { notify_signal("toast_activated"); }
+	void toastActivated(int p_action_index) const override { notify_action(p_action_index); }
 	void toastActivated(std::wstring) const override { notify_signal("toast_activated"); }
 	void toastDismissed(WinToastDismissalReason) const override {}
 	void toastFailed() const override { notify_signal("toast_failed"); }
@@ -50,6 +50,13 @@ private:
 		godot::Object *toaster = godot::ObjectDB::get_instance(_toaster_id);
 		if (toaster != nullptr) {
 			toaster->call_deferred("emit_signal", godot::StringName(p_signal), _toast_id->load());
+		}
+	}
+
+	void notify_action(int p_action_index) const {
+		godot::Object *toaster = godot::ObjectDB::get_instance(_toaster_id);
+		if (toaster != nullptr) {
+			toaster->call_deferred("emit_signal", godot::StringName("toast_action"), _toast_id->load(), p_action_index);
 		}
 	}
 
@@ -101,6 +108,7 @@ int64_t WinToaster::show_toast(const String &p_title, const String &p_message, c
 
 	const bool has_options = p_options.is_valid();
 	const String icon_path = has_options ? p_options->get_icon_path() : String();
+	const PackedStringArray actions = has_options ? p_options->get_actions() : PackedStringArray();
 	const ToastImageCrop image_crop = has_options ? p_options->get_image_crop() : TOAST_IMAGE_CROP_SQUARE;
 	const ToastDuration duration = has_options ? p_options->get_duration() : TOAST_DURATION_SYSTEM;
 	const ToastSound sound = has_options ? p_options->get_sound() : TOAST_SOUND_DEFAULT;
@@ -114,6 +122,15 @@ int64_t WinToaster::show_toast(const String &p_title, const String &p_message, c
 	if (has_icon) {
 		toast.setImagePath(to_wide(icon_path),
 				image_crop == TOAST_IMAGE_CROP_CIRCLE ? WinToastTemplate::Circle : WinToastTemplate::Square);
+	}
+
+	// Windows supports at most 5 action buttons; WinToast does not enforce it.
+	const int64_t action_count = actions.size() > 5 ? 5 : actions.size();
+	if (actions.size() > 5) {
+		UtilityFunctions::push_warning("WinToaster: at most 5 toast actions are supported; extra entries were ignored.");
+	}
+	for (int64_t i = 0; i < action_count; i++) {
+		toast.addAction(to_wide(actions[i]));
 	}
 
 	// A loop needs a sound source, so explicitly select the default sound then.
@@ -180,6 +197,7 @@ void WinToaster::clear() {
 void WinToaster::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("toast_shown", PropertyInfo(Variant::INT, "toast_id")));
 	ADD_SIGNAL(MethodInfo("toast_activated", PropertyInfo(Variant::INT, "toast_id")));
+	ADD_SIGNAL(MethodInfo("toast_action", PropertyInfo(Variant::INT, "toast_id"), PropertyInfo(Variant::INT, "action_index")));
 	ADD_SIGNAL(MethodInfo("toast_failed", PropertyInfo(Variant::INT, "toast_id")));
 
 	BIND_ENUM_CONSTANT(TOAST_DURATION_SYSTEM);

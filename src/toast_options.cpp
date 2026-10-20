@@ -9,6 +9,10 @@ void ToastOptions::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_icon_path"), &ToastOptions::get_icon_path);
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "icon_path", PROPERTY_HINT_FILE, "*.png,*.jpg,*.jpeg,*.gif"), "set_icon_path", "get_icon_path");
 
+	ClassDB::bind_method(D_METHOD("set_actions", "actions"), &ToastOptions::set_actions);
+	ClassDB::bind_method(D_METHOD("get_actions"), &ToastOptions::get_actions);
+	ADD_PROPERTY(PropertyInfo(Variant::PACKED_STRING_ARRAY, "actions"), "set_actions", "get_actions");
+
 	ClassDB::bind_method(D_METHOD("set_image_crop", "crop"), &ToastOptions::set_image_crop);
 	ClassDB::bind_method(D_METHOD("get_image_crop"), &ToastOptions::get_image_crop);
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "image_crop", PROPERTY_HINT_ENUM, "Square,Circle"), "set_image_crop", "get_image_crop");
