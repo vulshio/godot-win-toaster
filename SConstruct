@@ -70,6 +70,21 @@ Run the following command to download godot-cpp:
 
 env = SConscript("godot-cpp/SConstruct", {"api_version": api_version, "env": env, "customs": customs})
 
+if env["platform"] != "windows":
+    print_error("godot-win-toaster is Windows-only: the vendored WinToast implements the Windows toast API.")
+    sys.exit(1)
+
+# WinToast needs MSVC's WRL headers (wrl/implements.h), so a MinGW fallback
+# cannot work. SCons silently picks MinGW when it fails to detect MSVC; fail
+# with a useful message instead of a missing-header error.
+if env["platform"] == "windows" and env.get("use_mingw", False):
+    print_error("""WinToaster requires MSVC: the vendored WinToast uses MSVC-only WRL headers.
+
+SCons selected MinGW because it could not detect a Visual Studio installation.
+Install Visual Studio Build Tools with the C++ workload, or use a newer SCons
+version that supports your Visual Studio release.""")
+    sys.exit(1)
+
 env.Append(CPPPATH=["src/"])
 sources = Glob("src/*.cpp")
 

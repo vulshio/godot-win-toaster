@@ -39,6 +39,10 @@ jobs:
         with:
           platform: ${{ matrix.target.platform }}
           windows-compiler: msvc
+          # The action defaults to SCons 4.4.0, which does not detect MSVC on
+          # current windows-latest runners (Python 3.14 / newer VS) and silently
+          # falls back to MinGW, where WinToast's WRL headers do not exist.
+          scons-version: 4.11.1
           em-version: 3.1.62
 
       # Build GDExtension (with caches)
