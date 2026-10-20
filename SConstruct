@@ -14,7 +14,29 @@ projectdir = "project"
 # project/bin/godot_win_toaster.gdextension matches.
 api_version = "4.3"
 
+# `scons release` is a shorthand for `scons target=template_release`. The target
+# has to be written into ARGUMENTS before godot-cpp parses its options.
+if "target" not in ARGUMENTS and "release" in COMMAND_LINE_TARGETS:
+    ARGUMENTS["target"] = "template_release"
+
 localEnv = Environment(tools=["default"], PLATFORM="")
+
+# godot-cpp/gen is shared between api_version choices. If it was generated for a
+# different version, the source list and the generated headers disagree and the
+# link fails with missing symbols (for example godot::Logger when gen came from
+# 4.7 but api_version is 4.3). Force a regeneration in that case.
+_gen_version_header = os.path.join("godot-cpp", "gen", "include", "godot_cpp", "core", "version.hpp")
+try:
+    with open(_gen_version_header, encoding="utf-8") as _gen_version_file:
+        for _line in _gen_version_file:
+            if _line.startswith("#define GODOT_VERSION_MINOR"):
+                _gen_minor = int(_line.split()[-1])
+                if str(_gen_minor) != api_version.split(".")[1]:
+                    print("godot-cpp/gen was generated for Godot 4.%d but api_version is %s: regenerating bindings." % (_gen_minor, api_version))
+                    localEnv["generate_bindings"] = True
+                break
+except OSError:
+    pass
 
 # Build profiles can be used to decrease compile times.
 # You can either specify "disabled_classes", OR
@@ -31,6 +53,11 @@ opts = Variables(customs, ARGUMENTS)
 opts.Update(localEnv)
 
 Help(opts.GenerateHelpText(localEnv))
+Help("""
+Local targets:
+    scons           build template_debug (default)
+    scons release   build template_release
+""")
 
 env = localEnv.Clone()
 
@@ -79,3 +106,7 @@ copy = env.Install("{}/bin/{}/".format(projectdir, env["platform"]), library)
 
 default_args = [library, copy]
 Default(*default_args)
+
+# `scons release` resolves to this alias; the variant was selected above.
+if "release" in COMMAND_LINE_TARGETS:
+    env.Alias("release", default_args)
