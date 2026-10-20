@@ -13,27 +13,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Test a few selected combinations of parameters ("test case matrix").
-        # While it would be nice to test all needed combinations, in practice this would a waste of CI usage time.
-        # By building just with a few combinations, we only need a few runners,
-        # while still achieving adequate coverage.
-        # To make a full build with all combinations, use the make_build.yml workflow instead.
+        # WinToaster is Windows-only: the extension sources and the vendored
+        # WinToast library include the Windows SDK, so the cross-platform matrix
+        # from the godot-cpp template cannot compile on Linux/macOS/Android/Web.
+        # Build both variants on Windows x86_64 instead.
         include:
-          - target: { platform: linux, arch: x86_64, os: ubuntu-22.04 }
+          - target: { platform: windows, arch: x86_64, os: windows-latest }
             target-type: template_debug
-            float-precision: double
+            float-precision: single
           - target: { platform: windows, arch: x86_64, os: windows-latest }
             target-type: template_release
             float-precision: single
-          - target: { platform: macos, arch: universal, os: macos-latest }
-            target-type: template_debug
-            float-precision: single
-          - target: { platform: android, arch: arm64, os: ubuntu-22.04 }
-            target-type: template_debug
-            float-precision: single
-          - target: { platform: web, arch: wasm32, os: ubuntu-22.04 }
-            target-type: template_release
-            float-precision: double
 
     runs-on: ${{ matrix.target.os }}
     steps:
@@ -43,27 +33,12 @@ jobs:
         with:
           submodules: true
 
-      # Lint
-      #- name: Setup clang-format
-      #  shell: bash
-      #  run: |
-      #    python -m pip install clang-format
-      #- name: Run clang-format
-      #  shell: bash
-      #  run: |
-      #    clang-format src/** --dry-run --Werror
-
-      # Add linux x86_32 toolchain
-      - name: Install multilib support
-        if: ${{ matrix.target.platform == 'linux' && matrix.target.arch == 'x86_32' }}
-        run: |
-          sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
-
       # Setup dependencies
       - name: Setup godot-cpp
         uses: ./godot-cpp/.github/actions/setup-godot-cpp
         with:
           platform: ${{ matrix.target.platform }}
+          windows-compiler: msvc
           em-version: 3.1.62
 
       # Build GDExtension (with caches)
@@ -74,7 +49,7 @@ jobs:
           scons-cache: ${{ github.workspace }}/.scons-cache/
           cache-name: ${{ matrix.target.platform }}_${{ matrix.target.arch }}_${{ matrix.float-precision }}_${{ matrix.target-type }}
 
-      - name: Build GDExtension Debug Build
+      - name: Build GDExtension
         shell: sh
         env:
           SCONS_CACHE: ${{ github.workspace }}/.scons-cache/
