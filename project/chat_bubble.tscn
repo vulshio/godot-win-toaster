@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bxfyks3eo05ta"]
+
+[ext_resource type="Script" uid="uid://kvk2jk0g2cod" path="res://chat_bubble.gd" id="1_gjmhe"]
+[ext_resource type="Texture2D" uid="uid://cwwvtbe2dwh5n" path="res://ice.png" id="1_udckb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xbo3k"]
+content_margin_left = 10.0
+content_margin_top = 5.0
+content_margin_right = 10.0
+content_margin_bottom = 5.0
+bg_color = Color(0.3927293, 0.39272937, 0.3927292, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="ChatBubble" type="HBoxContainer" unique_id=199332152]
+offset_right = 138.0
+offset_bottom = 43.0
+size_flags_horizontal = 0
+theme_override_constants/separation = 12
+script = ExtResource("1_gjmhe")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1608653007]
+custom_minimum_size = Vector2(42, 42)
+layout_mode = 2
+texture = ExtResource("1_udckb")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=711567171]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_xbo3k")
+
+[node name="Label" type="Label" parent="PanelContainer" unique_id=28731573]
+layout_mode = 2
+text = "Hello, world!"
